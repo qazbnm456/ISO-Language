@@ -413,12 +413,12 @@ public:
         if(e_Type == 1)
         {
             printIndent(indent);
-            printf("[DefinitionAST || e_Class]:\n");
+            printf("[DefinitionAST[1] || e_Class]:\n");
         }
         else if(e_Type == 2)
         {
             printIndent(indent);
-            printf("[DefinitionAST || e_Func]:\n");
+            printf("[DefinitionAST[2] || e_Func]:\n");
             decl_spec->print(indent+2);
             declarator->print(indent+2);
             block->print(indent+2);
@@ -525,7 +525,7 @@ public:
         if(e_Type == 1)
         {
             printIndent(indent);
-            printf("[FunctionAST || e_Identifier]:\n");
+            printf("[FunctionAST[1] || e_Identifier]:\n");
             printIndent(indent);
             printf("Name: %s\n", Name.c_str());
             printIndent(indent);
@@ -540,7 +540,7 @@ public:
         else if(e_Type == 2)
         {
             printIndent(indent);
-            printf("[FunctionAST || e_Array]:\n");
+            printf("[FunctionAST[2] || e_Array]:\n");
             printIndent(indent);
             printf("Name: %s\n", Name.c_str());
             printIndent(indent);
@@ -561,7 +561,7 @@ public:
         else
         {
             printIndent(indent);
-            printf("[FunctionAST || e_Func]:\n");
+            printf("[FunctionAST[3] || e_Func]:\n");
             printIndent(indent);
             printf("Name: %s\n", Name.c_str());
         }

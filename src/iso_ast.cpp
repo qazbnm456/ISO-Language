@@ -8,7 +8,10 @@
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/GlobalVariable.h>
 #include <llvm/IR/Instructions.h>
+#include <llvm/IR/CallingConv.h>
+#include <llvm/IR/Function.h>
 #include <llvm/ExecutionEngine/GenericValue.h>
+#include <llvm/ADT/StringRef.h>
 #include <iostream>
 
 using namespace llvm;
@@ -25,7 +28,10 @@ Value* StringList::codeGen(class codeGenerator* cg)
 
 Value* InitDeclAST::codeGen(class codeGenerator* cg)
 {
-    func->codeGen(cg);
+    if(func)
+    {
+        func->codeGen(cg);
+    }
     return 0;
 }
 
@@ -101,26 +107,26 @@ Value* DeclarationAST::codeGen(class codeGenerator* cg)
             case str2int("int"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                else
-                    return cg->getType((*it))
+                //else
+                    //return new StringRef((*it)->c_str());
                 break;
             case str2int("long"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                else
-                    return cg->getType((*it))
+                //else
+                    //return new StringRef((*it)->c_str());
                 break;
             case str2int("float"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                else
-                    return cg->getType((*it))
+                //else
+                    //return new StringRef((*it)->c_str());
                 break;
             case str2int("double"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                else
-                    return cg->getType((*it))
+                //else
+                    //return new StringRef((*it)->c_str());
                 break;
         }
     }
@@ -135,16 +141,17 @@ Value* DefinitionAST::codeGen(class codeGenerator* cg)
     }
     else if(e_Type == 2)
     {
-        std::vector<Type*> FuncTy_1_args;
+        /*std::vector<Type*> FuncTy_1_args;
         FunctionType* FuncTy_1 = FunctionType::get(decl_spec->codeGen(cg), FuncTy_1_args, false);
-        Function* func_main = cg->getIRBuilder()->getFunction("main");
+        Function* func_main = cg->getModule()->getFunction("main");
         if (!func_main)
         {
-            func_main = Function::Create(FuncTy_1, GlobalValue::ExternalLinkage, "main", cg->getIRBuilder()); 
+            func_main = Function::Create(FuncTy_1, GlobalValue::ExternalLinkage, "main", cg->getModule()); 
             func_main->setCallingConv(CallingConv::C);
         }
         declarator->codeGen(cg);
-        block->codeGen(cg);
+        block->codeGen(cg);*/
+        return 0;
     }
 }
 
@@ -176,6 +183,9 @@ Value* FunctionAST::codeGen(class codeGenerator* cg)
     }
     else
     {
+        /*val = LLVMGetLastFunction(cg->getModule());
+        val->setName(Name);
+        return 0;*/
     }
     Type* type = cg->getType(cg->currentType[0][0]);
     //GlobalVariable* temp = cast<GlobalVariable>(cg->getModule()->getOrInsertGlobal(Name, type));
@@ -201,7 +211,7 @@ Value* ReturnAST::codeGen(class codeGenerator* cg)
     }
     else
     {
-        return 
+        return 0;
     }
 }
 
