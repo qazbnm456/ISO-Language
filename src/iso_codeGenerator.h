@@ -15,6 +15,11 @@
 
 using namespace llvm;
 
+typedef struct FuncBlock {
+	Type* retType;
+	Function* func;
+} Func_Block;
+
 class codeGenerator
 {
 private:
@@ -39,6 +44,7 @@ public:
 	map<string, Type*> typeTable;
 	map<string, Value*> NamedValues;
 	deque<string*>* currentType;
+	Func_Block fBlock;
 };
 
 #endif //ISO_CODEGEN_H

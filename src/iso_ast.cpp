@@ -10,6 +10,7 @@
 #include <llvm/IR/Instructions.h>
 #include <llvm/IR/CallingConv.h>
 #include <llvm/IR/Function.h>
+#include <llvm/IR/Verifier.h>
 #include <llvm/ExecutionEngine/GenericValue.h>
 #include <llvm/ADT/StringRef.h>
 #include <iostream>
@@ -107,26 +108,26 @@ Value* DeclarationAST::codeGen(class codeGenerator* cg)
             case str2int("int"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                //else
-                    //return new StringRef((*it)->c_str());
+                else
+                    cg->fBlock.retType = cg->getIRBuilder()->getInt32Ty();
                 break;
             case str2int("long"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                //else
-                    //return new StringRef((*it)->c_str());
+                else
+                    cg->fBlock.retType = cg->getIRBuilder()->getInt64Ty();
                 break;
             case str2int("float"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                //else
-                    //return new StringRef((*it)->c_str());
+                else
+                    cg->fBlock.retType = cg->getIRBuilder()->getFloatTy();
                 break;
             case str2int("double"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
-                //else
-                    //return new StringRef((*it)->c_str());
+                else
+                    cg->fBlock.retType = cg->getIRBuilder()->getDoubleTy();
                 break;
         }
     }
@@ -151,6 +152,11 @@ Value* DefinitionAST::codeGen(class codeGenerator* cg)
         }
         declarator->codeGen(cg);
         block->codeGen(cg);*/
+        decl_spec->codeGen(cg);
+        declarator->codeGen(cg);
+        BasicBlock *entry = BasicBlock::Create(cg->getLLVMContext(), "entry", cg->fBlock.func);
+        cg->getIRBuilder()->SetInsertPoint(entry);
+        block->codeGen(cg);
         return 0;
     }
 }
@@ -186,6 +192,16 @@ Value* FunctionAST::codeGen(class codeGenerator* cg)
         /*val = LLVMGetLastFunction(cg->getModule());
         val->setName(Name);
         return 0;*/
+        std::vector<Type*> FuncTy_1_args;
+        FunctionType* FuncTy_1 = FunctionType::get(cg->fBlock.retType, FuncTy_1_args, false);
+        Function* func_main = cg->getModule()->getFunction(Name);
+        if (!func_main)
+        {
+            func_main = Function::Create(FuncTy_1, GlobalValue::ExternalLinkage, Name, cg->getModule()); 
+            func_main->setCallingConv(CallingConv::C);
+            cg->fBlock.func = func_main;
+        }
+        return 0;
     }
     Type* type = cg->getType(cg->currentType[0][0]);
     //GlobalVariable* temp = cast<GlobalVariable>(cg->getModule()->getOrInsertGlobal(Name, type));
@@ -207,12 +223,14 @@ Value* ReturnAST::codeGen(class codeGenerator* cg)
 {
     if(m_expr)
     {
-        return m_expr->codeGen(cg);
+        cg->getIRBuilder()->CreateRet(m_expr->codeGen(cg));
     }
     else
     {
-        return 0;
+        cg->getIRBuilder()->CreateRet(NULL);
     }
+    verifyFunction(*(cg->fBlock.func));
+    return 0;
 }
 
 Value* SegmentAST::codeGen(class codeGenerator* cg)
@@ -305,9 +323,27 @@ Value* RelationalAST::codeGen(class codeGenerator* cg)
     Value* L = m_expr1->codeGen(cg);
     Value* R = m_expr2->codeGen(cg);
 
-    //Value* cmp = cg->getIRBuilder()->getInt32(m_op);
+    switch(str2int(m_op->c_str()))
+    {
+        case str2int("<"):
+            return cg->getIRBuilder()->CreateICmpULT(L, R, "tmp");
+        case str2int("<="):
+            return cg->getIRBuilder()->CreateICmpULE(L, R, "tmp");
+        case str2int(">"):
+            return cg->getIRBuilder()->CreateICmpUGT(L, R, "tmp");
+        case str2int(">="):
+            return cg->getIRBuilder()->CreateICmpUGE(L, R, "tmp");
+        /*case str2int("<"):
+            return cg->getIRBuilder()->CreateICmpULT(L, R, "tmp");
+        case str2int("<"):
+            return cg->getIRBuilder()->CreateICmpULT(L, R, "tmp");
+        case str2int("<"):
+            return cg->getIRBuilder()->CreateICmpULT(L, R, "tmp");
+        case str2int("<"):
+            return cg->getIRBuilder()->CreateICmpULT(L, R, "tmp");*/
+    }
 
-    return 0;
+    //return 0;
 }
 
 Value* EqualityAST::codeGen(class codeGenerator* cg)
@@ -414,6 +450,16 @@ Value* AssignmentAST::codeGen(class codeGenerator* cg)
 
 Value* IfElseAST::codeGen(class codeGenerator* cg)
 {
+    BasicBlock *cond_true = BasicBlock::Create(cg->getLLVMContext(), "cond_true", cg->fBlock.func);
+    BasicBlock *cond_false = BasicBlock::Create(cg->getLLVMContext(), "cond_false", cg->fBlock.func);
+    Value *cond = m_cond->codeGen(cg);
+    cg->getIRBuilder()->CreateCondBr(cond, cond_true, cond_false);
+    cg->getIRBuilder()->SetInsertPoint(cond_true);
+    m_thenStmt->codeGen(cg);
+    if(m_elseStmt != 0) {
+        cg->getIRBuilder()->SetInsertPoint(cond_false);
+        m_elseStmt->codeGen(cg);
+    }
     return 0;
 }
 
