@@ -27,6 +27,16 @@ Value* StringList::codeGen(class codeGenerator* cg)
     return 0;
 }
 
+Value* ParaDeclAST::codeGen(class codeGenerator* cg)
+{
+    return 0;
+}
+
+Value* ParaDeclListAST::codeGen(class codeGenerator* cg)
+{
+    return 0;
+}
+
 Value* InitDeclAST::codeGen(class codeGenerator* cg)
 {
     if(func)

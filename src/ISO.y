@@ -27,6 +27,8 @@
     class StringList* arglist;
     class SegmentAST* segment;
     class DeclarationAST* decl;
+    class ParaDeclListAST* paraDecl;
+    class ParaDeclAST* para;
 }
 
 /* literal tokens */
@@ -105,6 +107,8 @@
 %type <token> storage_class_specifier type_specifier type_qualifier assignment_operator
 %type <initDecl> init_declarator_list
 %type <init> initializer_list
+%type <paraDecl> parameter_type_list parameter_list
+%type <para> parameter_declaration
 %type <func> declarator direct_declarator pointer
 %type <arglist> identifier_list
 
@@ -162,11 +166,11 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER 																			{ $$ = new FunctionAST(*($1.m_name), NULL, FunctionAST::e_Identifier); }
+	: IDENTIFIER 																			{ $$ = new FunctionAST(*($1.m_name), FunctionAST::e_Identifier); }
 	| LPAREN declarator RPAREN																{ $$ = $2; } // TODO
 	| direct_declarator LBRACKET constant_expression RBRACKET								{ $1->expr = $3; $1->e_Type = FunctionAST::e_Array; } // test[a<<3]
 	| direct_declarator LBRACKET RBRACKET 						     						{ $1->expr = NULL; $1->e_Type = FunctionAST::e_Array; } // test[]
-	| direct_declarator LPAREN parameter_type_list RPAREN		    						{ $1->e_Type = FunctionAST::e_Func;} // test(int a, int b, ...)
+	| direct_declarator LPAREN parameter_type_list RPAREN		    						{ $1->e_Type = FunctionAST::e_Func; $1->parameters = $3; } // test(int a, int b, ...)
 	| direct_declarator LPAREN identifier_list RPAREN			    						{ $1->e_Type = FunctionAST::e_Func; $1->Args = &($3->m_stringVec); } // test(a, b, c)
 	| direct_declarator LPAREN RPAREN							    						{ $1->e_Type = FunctionAST::e_Func; $1->Args = NULL; } // test()
 	;
@@ -176,19 +180,19 @@ constant_expression
 	;
 
 parameter_type_list
-	: parameter_list 																		{}
-	| parameter_list COMMA ELLIPSIS 														{}
+	: parameter_list 																		{ $$ = $1; }
+	| parameter_list COMMA ELLIPSIS 														{ $$ = $1; $$->ellipsis_exist = true; }
 	;
 
 parameter_list
-	: parameter_declaration 																{}
-	| parameter_list COMMA parameter_declaration     										{}
+	: parameter_declaration 																{ $$ = new ParaDeclListAST(); $$->para_decl_list.push_back($1); }
+	| parameter_list COMMA parameter_declaration     										{ $1->para_decl_list.push_back($3); }
 	;
 
 parameter_declaration
-	: declaration_specifiers declarator    													{}
+	: declaration_specifiers declarator    													{ $$ = new ParaDeclAST($1, $2); }
 	//| declaration_specifiers abstract_declarator 											{}
-	| declaration_specifiers 																{}
+	| declaration_specifiers 																{ $$ = new ParaDeclAST($1, NULL); }
 	;
 
 identifier_list

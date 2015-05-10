@@ -299,9 +299,11 @@ typedef union YYSTYPE
     class StringList* arglist;
     class SegmentAST* segment;
     class DeclarationAST* decl;
+    class ParaDeclListAST* paraDecl;
+    class ParaDeclAST* para;
 }
 /* Line 193 of yacc.c.  */
-#line 305 "y.tab.c"
+#line 307 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -314,7 +316,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 318 "y.tab.c"
+#line 320 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -674,24 +676,24 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   122,   122,   123,   124,   128,   129,   133,   134,   135,
-     136,   140,   141,   142,   146,   147,   148,   149,   150,   151,
-     155,   156,   160,   161,   165,   166,   167,   168,   169,   170,
-     171,   175,   179,   180,   184,   185,   189,   191,   195,   196,
-     200,   201,   202,   207,   208,   212,   213,   214,   215,   216,
-     217,   221,   222,   226,   227,   231,   232,   233,   237,   238,
-     242,   243,   244,   245,   249,   250,   251,   252,   253,   254,
-     255,   256,   257,   258,   265,   266,   270,   271,   275,   276,
-     282,   291,   292,   296,   297,   302,   303,   304,   305,   306,
-     310,   314,   315,   316,   317,   318,   322,   327,   328,   329,
-     333,   337,   338,   339,   340,   341,   342,   343,   344,   345,
-     346,   347,   351,   352,   356,   357,   361,   362,   366,   367,
-     371,   372,   376,   377,   381,   382,   383,   387,   388,   389,
-     390,   391,   395,   396,   397,   401,   402,   403,   407,   408,
-     409,   410,   414,   415,   419,   423,   424,   425,   426,   430,
-     431,   432,   433,   434,   435,   439,   440,   441,   442,   443,
-     444,   448,   449,   450,   451,   452,   453,   454,   455,   459,
-     460,   464,   465,   469,   470,   471,   475,   476,   481,   483
+       0,   126,   126,   127,   128,   132,   133,   137,   138,   139,
+     140,   144,   145,   146,   150,   151,   152,   153,   154,   155,
+     159,   160,   164,   165,   169,   170,   171,   172,   173,   174,
+     175,   179,   183,   184,   188,   189,   193,   195,   199,   200,
+     204,   205,   206,   211,   212,   216,   217,   218,   219,   220,
+     221,   225,   226,   230,   231,   235,   236,   237,   241,   242,
+     246,   247,   248,   249,   253,   254,   255,   256,   257,   258,
+     259,   260,   261,   262,   269,   270,   274,   275,   279,   280,
+     286,   295,   296,   300,   301,   306,   307,   308,   309,   310,
+     314,   318,   319,   320,   321,   322,   326,   331,   332,   333,
+     337,   341,   342,   343,   344,   345,   346,   347,   348,   349,
+     350,   351,   355,   356,   360,   361,   365,   366,   370,   371,
+     375,   376,   380,   381,   385,   386,   387,   391,   392,   393,
+     394,   395,   399,   400,   401,   405,   406,   407,   411,   412,
+     413,   414,   418,   419,   423,   427,   428,   429,   430,   434,
+     435,   436,   437,   438,   439,   443,   444,   445,   446,   447,
+     448,   452,   453,   454,   455,   456,   457,   458,   459,   463,
+     464,   468,   469,   473,   474,   475,   479,   480,   485,   487
 };
 #endif
 
@@ -1945,803 +1947,803 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 122 "ISO.y"
+#line 126 "ISO.y"
     { (yyval.node) = new GetVarAST(NULL, (yyvsp[(1) - (1)].token).m_name, GetVarAST::NONE); }
     break;
 
   case 3:
-#line 123 "ISO.y"
+#line 127 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 4:
-#line 124 "ISO.y"
+#line 128 "ISO.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); }
     break;
 
   case 5:
-#line 128 "ISO.y"
+#line 132 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 7:
-#line 133 "ISO.y"
+#line 137 "ISO.y"
     { (yyval.node) = new Int32AST((yyvsp[(1) - (1)].token).m_integerValue); }
     break;
 
   case 8:
-#line 134 "ISO.y"
+#line 138 "ISO.y"
     { (yyval.node) = new Int64AST((yyvsp[(1) - (1)].token).m_integerValue); }
     break;
 
   case 9:
-#line 135 "ISO.y"
+#line 139 "ISO.y"
     { (yyval.node) = new FloatAST((yyvsp[(1) - (1)].token).m_doubleValue); }
     break;
 
   case 10:
-#line 136 "ISO.y"
+#line 140 "ISO.y"
     { (yyval.node) = new DoubleAST((yyvsp[(1) - (1)].token).m_doubleValue); }
     break;
 
   case 11:
-#line 140 "ISO.y"
+#line 144 "ISO.y"
     {}
     break;
 
   case 12:
-#line 141 "ISO.y"
+#line 145 "ISO.y"
     {}
     break;
 
   case 13:
-#line 142 "ISO.y"
+#line 146 "ISO.y"
     {}
     break;
 
   case 14:
-#line 146 "ISO.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
-    break;
-
-  case 15:
-#line 147 "ISO.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
-    break;
-
-  case 16:
-#line 148 "ISO.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
-    break;
-
-  case 17:
-#line 149 "ISO.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
-    break;
-
-  case 18:
 #line 150 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
-  case 19:
+  case 15:
 #line 151 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
-  case 20:
+  case 16:
+#line 152 "ISO.y"
+    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    break;
+
+  case 17:
+#line 153 "ISO.y"
+    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    break;
+
+  case 18:
+#line 154 "ISO.y"
+    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    break;
+
+  case 19:
 #line 155 "ISO.y"
+    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    break;
+
+  case 20:
+#line 159 "ISO.y"
     { (yyval.block) = new BlockAST(); (yyval.block)->m_statements.push_back((yyvsp[(1) - (1)].node)); }
     break;
 
   case 21:
-#line 156 "ISO.y"
+#line 160 "ISO.y"
     { if((yyvsp[(2) - (2)].node) != NULL) (yyvsp[(1) - (2)].block)->m_statements.push_back((yyvsp[(2) - (2)].node)); }
     break;
 
   case 22:
-#line 160 "ISO.y"
+#line 164 "ISO.y"
     { (yyval.func) = (yyvsp[(1) - (2)].func); }
     break;
 
   case 23:
-#line 161 "ISO.y"
+#line 165 "ISO.y"
     { (yyval.func) = (yyvsp[(1) - (1)].func); }
     break;
 
   case 24:
-#line 165 "ISO.y"
-    { (yyval.func) = new FunctionAST(*((yyvsp[(1) - (1)].token).m_name), NULL, FunctionAST::e_Identifier); }
+#line 169 "ISO.y"
+    { (yyval.func) = new FunctionAST(*((yyvsp[(1) - (1)].token).m_name), FunctionAST::e_Identifier); }
     break;
 
   case 25:
-#line 166 "ISO.y"
+#line 170 "ISO.y"
     { (yyval.func) = (yyvsp[(2) - (3)].func); }
     break;
 
   case 26:
-#line 167 "ISO.y"
+#line 171 "ISO.y"
     { (yyvsp[(1) - (4)].func)->expr = (yyvsp[(3) - (4)].node); (yyvsp[(1) - (4)].func)->e_Type = FunctionAST::e_Array; }
     break;
 
   case 27:
-#line 168 "ISO.y"
+#line 172 "ISO.y"
     { (yyvsp[(1) - (3)].func)->expr = NULL; (yyvsp[(1) - (3)].func)->e_Type = FunctionAST::e_Array; }
     break;
 
   case 28:
-#line 169 "ISO.y"
-    { (yyvsp[(1) - (4)].func)->e_Type = FunctionAST::e_Func;}
+#line 173 "ISO.y"
+    { (yyvsp[(1) - (4)].func)->e_Type = FunctionAST::e_Func; (yyvsp[(1) - (4)].func)->parameters = (yyvsp[(3) - (4)].paraDecl); }
     break;
 
   case 29:
-#line 170 "ISO.y"
+#line 174 "ISO.y"
     { (yyvsp[(1) - (4)].func)->e_Type = FunctionAST::e_Func; (yyvsp[(1) - (4)].func)->Args = &((yyvsp[(3) - (4)].arglist)->m_stringVec); }
     break;
 
   case 30:
-#line 171 "ISO.y"
+#line 175 "ISO.y"
     { (yyvsp[(1) - (3)].func)->e_Type = FunctionAST::e_Func; (yyvsp[(1) - (3)].func)->Args = NULL; }
     break;
 
   case 31:
-#line 175 "ISO.y"
-    {}
-    break;
-
-  case 32:
 #line 179 "ISO.y"
     {}
     break;
 
+  case 32:
+#line 183 "ISO.y"
+    { (yyval.paraDecl) = (yyvsp[(1) - (1)].paraDecl); }
+    break;
+
   case 33:
-#line 180 "ISO.y"
-    {}
+#line 184 "ISO.y"
+    { (yyval.paraDecl) = (yyvsp[(1) - (3)].paraDecl); (yyval.paraDecl)->ellipsis_exist = true; }
     break;
 
   case 34:
-#line 184 "ISO.y"
-    {}
+#line 188 "ISO.y"
+    { (yyval.paraDecl) = new ParaDeclListAST(); (yyval.paraDecl)->para_decl_list.push_back((yyvsp[(1) - (1)].para)); }
     break;
 
   case 35:
-#line 185 "ISO.y"
-    {}
+#line 189 "ISO.y"
+    { (yyvsp[(1) - (3)].paraDecl)->para_decl_list.push_back((yyvsp[(3) - (3)].para)); }
     break;
 
   case 36:
-#line 189 "ISO.y"
-    {}
+#line 193 "ISO.y"
+    { (yyval.para) = new ParaDeclAST((yyvsp[(1) - (2)].decl), (yyvsp[(2) - (2)].func)); }
     break;
 
   case 37:
-#line 191 "ISO.y"
-    {}
+#line 195 "ISO.y"
+    { (yyval.para) = new ParaDeclAST((yyvsp[(1) - (1)].decl), NULL); }
     break;
 
   case 38:
-#line 195 "ISO.y"
+#line 199 "ISO.y"
     { (yyval.arglist) = new StringList(); (yyval.arglist)->m_stringVec.push_back(*((yyvsp[(1) - (1)].token).m_name)); }
     break;
 
   case 39:
-#line 196 "ISO.y"
+#line 200 "ISO.y"
     { (yyvsp[(1) - (3)].arglist)->m_stringVec.push_back(*((yyvsp[(3) - (3)].token).m_name)); }
     break;
 
   case 40:
-#line 200 "ISO.y"
+#line 204 "ISO.y"
     {}
     break;
 
   case 41:
-#line 201 "ISO.y"
+#line 205 "ISO.y"
     {}
     break;
 
   case 42:
-#line 202 "ISO.y"
+#line 206 "ISO.y"
     {}
     break;
 
   case 43:
-#line 207 "ISO.y"
+#line 211 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (2)].decl); }
     break;
 
   case 44:
-#line 208 "ISO.y"
+#line 212 "ISO.y"
     { (yyvsp[(1) - (3)].decl)->InitDeclList = (yyvsp[(2) - (3)].initDecl); (yyval.node) = (yyvsp[(1) - (3)].decl); }
     break;
 
   case 45:
-#line 212 "ISO.y"
-    { (yyval.decl) = new DeclarationAST(); (yyval.decl)->specifiers.push_front((yyvsp[(1) - (1)].token).m_name); }
-    break;
-
-  case 46:
-#line 213 "ISO.y"
-    { (yyvsp[(2) - (2)].decl)->specifiers.push_front((yyvsp[(1) - (2)].token).m_name); (yyval.decl) = (yyvsp[(2) - (2)].decl); }
-    break;
-
-  case 47:
-#line 214 "ISO.y"
-    { (yyval.decl) = new DeclarationAST(); (yyval.decl)->specifiers.push_front((yyvsp[(1) - (1)].token).m_name); }
-    break;
-
-  case 48:
-#line 215 "ISO.y"
-    { (yyvsp[(2) - (2)].decl)->specifiers.push_front((yyvsp[(1) - (2)].token).m_name); (yyval.decl) = (yyvsp[(2) - (2)].decl); }
-    break;
-
-  case 49:
 #line 216 "ISO.y"
     { (yyval.decl) = new DeclarationAST(); (yyval.decl)->specifiers.push_front((yyvsp[(1) - (1)].token).m_name); }
     break;
 
-  case 50:
+  case 46:
 #line 217 "ISO.y"
     { (yyvsp[(2) - (2)].decl)->specifiers.push_front((yyvsp[(1) - (2)].token).m_name); (yyval.decl) = (yyvsp[(2) - (2)].decl); }
     break;
 
-  case 51:
+  case 47:
+#line 218 "ISO.y"
+    { (yyval.decl) = new DeclarationAST(); (yyval.decl)->specifiers.push_front((yyvsp[(1) - (1)].token).m_name); }
+    break;
+
+  case 48:
+#line 219 "ISO.y"
+    { (yyvsp[(2) - (2)].decl)->specifiers.push_front((yyvsp[(1) - (2)].token).m_name); (yyval.decl) = (yyvsp[(2) - (2)].decl); }
+    break;
+
+  case 49:
+#line 220 "ISO.y"
+    { (yyval.decl) = new DeclarationAST(); (yyval.decl)->specifiers.push_front((yyvsp[(1) - (1)].token).m_name); }
+    break;
+
+  case 50:
 #line 221 "ISO.y"
+    { (yyvsp[(2) - (2)].decl)->specifiers.push_front((yyvsp[(1) - (2)].token).m_name); (yyval.decl) = (yyvsp[(2) - (2)].decl); }
+    break;
+
+  case 51:
+#line 225 "ISO.y"
     { (yyval.initDecl) = new InitDeclListAST(); (yyval.initDecl)->decl_inits.push_back((yyvsp[(1) - (1)].node)); }
     break;
 
   case 52:
-#line 222 "ISO.y"
+#line 226 "ISO.y"
     { (yyvsp[(1) - (3)].initDecl)->decl_inits.push_back((yyvsp[(3) - (3)].node)); }
     break;
 
   case 53:
-#line 226 "ISO.y"
+#line 230 "ISO.y"
     { (yyval.node) = new InitDeclAST((yyvsp[(1) - (1)].func)); }
     break;
 
   case 54:
-#line 227 "ISO.y"
+#line 231 "ISO.y"
     { (yyval.node) = new InitDeclAST((yyvsp[(1) - (3)].func)); (yyvsp[(1) - (3)].func)->initializer = (yyvsp[(3) - (3)].node); }
     break;
 
   case 55:
-#line 231 "ISO.y"
+#line 235 "ISO.y"
     { (yyval.node) = new InitAST((yyvsp[(1) - (1)].node), NULL, InitAST::e_Expr); }
     break;
 
   case 56:
-#line 232 "ISO.y"
+#line 236 "ISO.y"
     { (yyval.node) = new InitAST(NULL, (yyvsp[(2) - (3)].init), InitAST::e_List); }
     break;
 
   case 57:
-#line 233 "ISO.y"
+#line 237 "ISO.y"
     { (yyval.node) = new InitAST(NULL, (yyvsp[(2) - (4)].init), InitAST::e_List_With_Comma); }
     break;
 
   case 58:
-#line 237 "ISO.y"
+#line 241 "ISO.y"
     { (yyval.init) = new InitListAST(); (yyval.init)->inits.push_back((yyvsp[(1) - (1)].node)); }
     break;
 
   case 59:
-#line 238 "ISO.y"
+#line 242 "ISO.y"
     { (yyvsp[(1) - (3)].init)->inits.push_back((yyvsp[(3) - (3)].node)); }
     break;
 
   case 60:
-#line 242 "ISO.y"
+#line 246 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 61:
-#line 243 "ISO.y"
+#line 247 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 62:
-#line 244 "ISO.y"
+#line 248 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 63:
-#line 245 "ISO.y"
+#line 249 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 65:
-#line 250 "ISO.y"
+#line 254 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (2)].token); }
     break;
 
   case 66:
-#line 251 "ISO.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].token); }
-    break;
-
-  case 67:
-#line 252 "ISO.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].token); }
-    break;
-
-  case 68:
-#line 253 "ISO.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].token); }
-    break;
-
-  case 69:
-#line 254 "ISO.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].token); }
-    break;
-
-  case 70:
 #line 255 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
-  case 71:
+  case 67:
 #line 256 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
-  case 72:
+  case 68:
 #line 257 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
-  case 73:
+  case 69:
 #line 258 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
+  case 70:
+#line 259 "ISO.y"
+    { (yyval.token) = (yyvsp[(1) - (1)].token); }
+    break;
+
+  case 71:
+#line 260 "ISO.y"
+    { (yyval.token) = (yyvsp[(1) - (1)].token); }
+    break;
+
+  case 72:
+#line 261 "ISO.y"
+    { (yyval.token) = (yyvsp[(1) - (1)].token); }
+    break;
+
+  case 73:
+#line 262 "ISO.y"
+    { (yyval.token) = (yyvsp[(1) - (1)].token); }
+    break;
+
   case 74:
-#line 265 "ISO.y"
+#line 269 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 75:
-#line 266 "ISO.y"
+#line 270 "ISO.y"
     { (yyval.token) = (yyvsp[(1) - (1)].token); }
     break;
 
   case 76:
-#line 270 "ISO.y"
+#line 274 "ISO.y"
     {}
     break;
 
   case 77:
-#line 271 "ISO.y"
+#line 275 "ISO.y"
     {}
     break;
 
   case 78:
-#line 275 "ISO.y"
+#line 279 "ISO.y"
     { (yyval.node) = new BlockAST(); }
     break;
 
   case 79:
-#line 276 "ISO.y"
+#line 280 "ISO.y"
     { (yyval.node) = (yyvsp[(2) - (3)].block); }
     break;
 
   case 80:
-#line 282 "ISO.y"
+#line 286 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 81:
-#line 291 "ISO.y"
+#line 295 "ISO.y"
     { (yyval.node) = NULL; }
     break;
 
   case 82:
-#line 292 "ISO.y"
+#line 296 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (2)].node); }
     break;
 
   case 83:
-#line 296 "ISO.y"
+#line 300 "ISO.y"
     { (yyval.node) = new IfElseAST((yyvsp[(3) - (7)].node), (yyvsp[(5) - (7)].node), (yyvsp[(7) - (7)].node)); }
     break;
 
   case 84:
-#line 297 "ISO.y"
+#line 301 "ISO.y"
     { (yyval.node) = new IfElseAST((yyvsp[(3) - (5)].node), (yyvsp[(5) - (5)].node), NULL); }
     break;
 
   case 85:
-#line 302 "ISO.y"
+#line 306 "ISO.y"
     { (yyval.node) = new WhileAST((yyvsp[(3) - (5)].node), (yyvsp[(5) - (5)].node)); }
     break;
 
   case 86:
-#line 303 "ISO.y"
+#line 307 "ISO.y"
     { (yyval.node) = new DoWhileAST((yyvsp[(5) - (7)].node), (yyvsp[(2) - (7)].node)); }
     break;
 
   case 87:
-#line 304 "ISO.y"
+#line 308 "ISO.y"
     {}
     break;
 
   case 88:
-#line 305 "ISO.y"
+#line 309 "ISO.y"
     { (yyval.node) = new ForAST((yyvsp[(3) - (6)].node), (yyvsp[(4) - (6)].node), NULL, (yyvsp[(6) - (6)].node)); }
     break;
 
   case 89:
-#line 306 "ISO.y"
+#line 310 "ISO.y"
     { (yyval.node) = new ForAST((yyvsp[(3) - (7)].node), (yyvsp[(4) - (7)].node), (yyvsp[(5) - (7)].node), (yyvsp[(7) - (7)].node)); }
     break;
 
   case 90:
-#line 310 "ISO.y"
-    {}
-    break;
-
-  case 91:
 #line 314 "ISO.y"
     {}
     break;
 
+  case 91:
+#line 318 "ISO.y"
+    {}
+    break;
+
   case 92:
-#line 315 "ISO.y"
+#line 319 "ISO.y"
     { (yyval.node) = new ContinueAST(); }
     break;
 
   case 93:
-#line 316 "ISO.y"
+#line 320 "ISO.y"
     { (yyval.node) = new BreakAST(); }
     break;
 
   case 94:
-#line 317 "ISO.y"
+#line 321 "ISO.y"
     { (yyval.node) = new ReturnAST(NULL); }
     break;
 
   case 95:
-#line 318 "ISO.y"
+#line 322 "ISO.y"
     { (yyval.node) = new ReturnAST((yyvsp[(2) - (3)].node)); }
     break;
 
   case 96:
-#line 322 "ISO.y"
+#line 326 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 97:
-#line 327 "ISO.y"
+#line 331 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 98:
-#line 328 "ISO.y"
+#line 332 "ISO.y"
     { (yyval.node) = new AssignmentAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 99:
-#line 329 "ISO.y"
-    {}
-    break;
-
-  case 100:
 #line 333 "ISO.y"
     {}
     break;
 
+  case 100:
+#line 337 "ISO.y"
+    {}
+    break;
+
   case 112:
-#line 351 "ISO.y"
+#line 355 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 113:
-#line 352 "ISO.y"
+#line 356 "ISO.y"
     { (yyval.node) = new ConditionalAST((yyvsp[(1) - (5)].node), (yyvsp[(3) - (5)].node), (yyvsp[(5) - (5)].node)); }
     break;
 
   case 114:
-#line 356 "ISO.y"
+#line 360 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 115:
-#line 357 "ISO.y"
+#line 361 "ISO.y"
     { (yyval.node) = new LogicalOrAST((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 116:
-#line 361 "ISO.y"
+#line 365 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 117:
-#line 362 "ISO.y"
+#line 366 "ISO.y"
     { (yyval.node) = new LogicalAndAST((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 118:
-#line 366 "ISO.y"
+#line 370 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 119:
-#line 367 "ISO.y"
+#line 371 "ISO.y"
     { (yyval.node) = new InclusiveOrAST((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 120:
-#line 371 "ISO.y"
+#line 375 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 121:
-#line 372 "ISO.y"
+#line 376 "ISO.y"
     { (yyval.node) = new ExclusiveOrAST((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 122:
-#line 376 "ISO.y"
+#line 380 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 123:
-#line 377 "ISO.y"
+#line 381 "ISO.y"
     { (yyval.node) = new AndAST((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 124:
-#line 381 "ISO.y"
+#line 385 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 125:
-#line 382 "ISO.y"
+#line 386 "ISO.y"
     { (yyval.node) = new EqualityAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 126:
-#line 383 "ISO.y"
+#line 387 "ISO.y"
     { (yyval.node) = new EqualityAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 127:
-#line 387 "ISO.y"
+#line 391 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 128:
-#line 388 "ISO.y"
+#line 392 "ISO.y"
     { (yyval.node) = new RelationalAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 129:
-#line 389 "ISO.y"
+#line 393 "ISO.y"
     { (yyval.node) = new RelationalAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 130:
-#line 390 "ISO.y"
+#line 394 "ISO.y"
     { (yyval.node) = new RelationalAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 131:
-#line 391 "ISO.y"
+#line 395 "ISO.y"
     { (yyval.node) = new RelationalAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 132:
-#line 395 "ISO.y"
+#line 399 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 133:
-#line 396 "ISO.y"
+#line 400 "ISO.y"
     { (yyval.node) = new ShiftAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 134:
-#line 397 "ISO.y"
+#line 401 "ISO.y"
     { (yyval.node) = new ShiftAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 135:
-#line 401 "ISO.y"
+#line 405 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 136:
-#line 402 "ISO.y"
+#line 406 "ISO.y"
     { (yyval.node) = new AdditiveAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 137:
-#line 403 "ISO.y"
+#line 407 "ISO.y"
     { (yyval.node) = new AdditiveAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 138:
-#line 407 "ISO.y"
+#line 411 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 139:
-#line 408 "ISO.y"
+#line 412 "ISO.y"
     { (yyval.node) = new MultiplicativeAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 140:
-#line 409 "ISO.y"
+#line 413 "ISO.y"
     { (yyval.node) = new MultiplicativeAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 141:
-#line 410 "ISO.y"
+#line 414 "ISO.y"
     { (yyval.node) = new MultiplicativeAST((yyvsp[(1) - (3)].node), (yyvsp[(2) - (3)].token).m_name, (yyvsp[(3) - (3)].node)); }
     break;
 
   case 142:
-#line 414 "ISO.y"
+#line 418 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 143:
-#line 415 "ISO.y"
-    {}
-    break;
-
-  case 144:
 #line 419 "ISO.y"
     {}
     break;
 
-  case 145:
+  case 144:
 #line 423 "ISO.y"
     {}
     break;
 
+  case 145:
+#line 427 "ISO.y"
+    {}
+    break;
+
   case 146:
-#line 424 "ISO.y"
+#line 428 "ISO.y"
     {}
     break;
 
   case 147:
-#line 425 "ISO.y"
+#line 429 "ISO.y"
     {}
     break;
 
   case 148:
-#line 426 "ISO.y"
+#line 430 "ISO.y"
     {}
     break;
 
   case 149:
-#line 430 "ISO.y"
+#line 434 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 150:
-#line 431 "ISO.y"
+#line 435 "ISO.y"
     { (yyval.node) = new UnaryAST((yyvsp[(2) - (2)].node), (yyvsp[(1) - (2)].token).m_name); }
     break;
 
   case 151:
-#line 432 "ISO.y"
+#line 436 "ISO.y"
     { (yyval.node) = new UnaryAST((yyvsp[(2) - (2)].node), (yyvsp[(1) - (2)].token).m_name); }
     break;
 
   case 152:
-#line 433 "ISO.y"
+#line 437 "ISO.y"
     {}
     break;
 
   case 153:
-#line 434 "ISO.y"
+#line 438 "ISO.y"
     {}
     break;
 
   case 154:
-#line 435 "ISO.y"
+#line 439 "ISO.y"
     {}
     break;
 
   case 161:
-#line 448 "ISO.y"
+#line 452 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 162:
-#line 449 "ISO.y"
-    {}
-    break;
-
-  case 163:
-#line 450 "ISO.y"
-    {}
-    break;
-
-  case 164:
-#line 451 "ISO.y"
-    {}
-    break;
-
-  case 165:
-#line 452 "ISO.y"
-    {}
-    break;
-
-  case 166:
 #line 453 "ISO.y"
     {}
     break;
 
-  case 167:
+  case 163:
 #line 454 "ISO.y"
     {}
     break;
 
-  case 168:
+  case 164:
 #line 455 "ISO.y"
     {}
     break;
 
-  case 169:
+  case 165:
+#line 456 "ISO.y"
+    {}
+    break;
+
+  case 166:
+#line 457 "ISO.y"
+    {}
+    break;
+
+  case 167:
+#line 458 "ISO.y"
+    {}
+    break;
+
+  case 168:
 #line 459 "ISO.y"
     {}
     break;
 
+  case 169:
+#line 463 "ISO.y"
+    {}
+    break;
+
   case 170:
-#line 460 "ISO.y"
+#line 464 "ISO.y"
     {}
     break;
 
   case 171:
-#line 464 "ISO.y"
+#line 468 "ISO.y"
     { ProgramHead = new SegmentAST(); (yyval.segment) = ProgramHead; if((yyvsp[(1) - (1)].node) != NULL) (yyval.segment)->m_segments.push_back((yyvsp[(1) - (1)].node)); }
     break;
 
   case 172:
-#line 465 "ISO.y"
+#line 469 "ISO.y"
     { if((yyvsp[(2) - (2)].node) != NULL) (yyvsp[(1) - (2)].segment)->m_segments.push_back((yyvsp[(2) - (2)].node)); }
     break;
 
   case 173:
-#line 469 "ISO.y"
+#line 473 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 174:
-#line 470 "ISO.y"
+#line 474 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 175:
-#line 471 "ISO.y"
+#line 475 "ISO.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 176:
-#line 475 "ISO.y"
+#line 479 "ISO.y"
     {}
     break;
 
   case 177:
-#line 476 "ISO.y"
+#line 480 "ISO.y"
     {}
     break;
 
   case 178:
-#line 481 "ISO.y"
+#line 485 "ISO.y"
     { (yyval.node) = new DefinitionAST((yyvsp[(1) - (3)].decl), (yyvsp[(2) - (3)].func), (yyvsp[(3) - (3)].node), DefinitionAST::e_Func); }
     break;
 
   case 179:
-#line 483 "ISO.y"
+#line 487 "ISO.y"
     {}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 2745 "y.tab.c"
+#line 2747 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2955,5 +2957,5 @@ yyreturn:
 }
 
 
-#line 486 "ISO.y"
+#line 490 "ISO.y"
 

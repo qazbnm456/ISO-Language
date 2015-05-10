@@ -25,6 +25,8 @@ public:
         tNodeAST, // type of NodeAST
         tNodeASTList,
         tStringList,
+        tParaDeclAST,
+        tParaDeclListAST,
         tInitDeclAST,
         tInitDeclListAST,
         tInitAST,
@@ -152,6 +154,63 @@ public:
         m_stringVec.push_back(str);
     }
 
+};
+
+class ParaDeclAST : public NodeAST
+{
+public:
+    class NodeAST* decl;
+    class NodeAST* func;
+    ParaDeclAST(class NodeAST* d, class NodeAST* f)
+        : decl(d)
+        , func(f)
+    {
+        m_type = tParaDeclAST;
+    }
+    virtual Value* codeGen(class codeGenerator* cg);
+    virtual void print(int indent)
+    {
+        printIndent(indent);
+        printf("[ParaDeclAST]\n");
+        if(decl)
+        {
+            decl->print(indent+2);
+        }
+        if(func)
+        {
+            func->print(indent+2);
+        }
+    }
+};
+
+class ParaDeclListAST : public NodeAST
+{
+public:
+    vector<class NodeAST*> para_decl_list;
+    bool ellipsis_exist;
+    ParaDeclListAST()
+    {
+        m_type = tParaDeclListAST;
+        ellipsis_exist = false;
+    }
+    virtual Value* codeGen(class codeGenerator* cg);
+    virtual void print(int indent)
+    {
+        printIndent(indent);
+        printf("[ParaDeclListAST]\n");
+        vector<class NodeAST*>::iterator it = para_decl_list.begin();
+        for(int i = 0; it != para_decl_list.end(); ++it, ++i)
+        {
+            printIndent(indent+2);
+            printf("para_decl[%d]:\n", i);
+            (*it)->print(indent+2);
+        }
+        if(ellipsis_exist)
+        {
+            printIndent(indent+2);
+            printf("...\n");
+        }
+    }
 };
 
 class InitDeclAST : public NodeAST
@@ -510,10 +569,10 @@ public:
     } e_Type;
     class NodeAST* expr; 
     class NodeAST* initializer;
+    class NodeAST* parameters;
 
-    FunctionAST(const string &name, vector<string>* args, enum type e_type)
+    FunctionAST(const string &name, enum type e_type)
         : Name(name)
-        , Args(args)
         , e_Type(e_type)
     {
         m_type = tFunctionAST;
@@ -564,6 +623,19 @@ public:
             printf("[FunctionAST[3] || e_Func]:\n");
             printIndent(indent);
             printf("Name: %s\n", Name.c_str());
+            if((Args != NULL) && (Args->size() != 0)) {
+                printIndent(indent);
+                printf("identifier_list: ");
+                for(vector<string>::iterator it = Args->begin(); it != Args->end(); ++it) {
+                    printf("%s ", it->c_str());
+                }
+                printf("\n");
+            }
+            else if(parameters) {
+                printIndent(indent);
+                printf("parameter_list:\n");
+                parameters->print(indent+2);
+            }
         }
     }
 };

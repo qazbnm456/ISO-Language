@@ -243,9 +243,11 @@ typedef union YYSTYPE
     class StringList* arglist;
     class SegmentAST* segment;
     class DeclarationAST* decl;
+    class ParaDeclListAST* paraDecl;
+    class ParaDeclAST* para;
 }
 /* Line 1529 of yacc.c.  */
-#line 249 "y.tab.h"
+#line 251 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
