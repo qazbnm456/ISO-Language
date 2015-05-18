@@ -18,6 +18,8 @@ using namespace llvm;
 typedef struct FuncBlock {
 	Type* retType;
 	Function* func;
+	std::vector<Type*> args;
+	int flag = 0;
 } Func_Block;
 
 class codeGenerator
@@ -39,7 +41,6 @@ public:
 	Value* createCast(Value* val, Type* type);
 	void generateCode(SegmentAST& root);
 	void printAST(SegmentAST& root);
-	//GenericValue runCode();
 
 	map<string, Type*> typeTable;
 	map<string, Value*> NamedValues;

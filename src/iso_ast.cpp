@@ -29,11 +29,17 @@ Value* StringList::codeGen(class codeGenerator* cg)
 
 Value* ParaDeclAST::codeGen(class codeGenerator* cg)
 {
+    decl->codeGen(cg);
     return 0;
 }
 
 Value* ParaDeclListAST::codeGen(class codeGenerator* cg)
 {
+    vector<class NodeAST*>::iterator it = para_decl_list.begin();
+    for(int i = 0; it != para_decl_list.end(); ++it, ++i)
+    {
+        (*it)->codeGen(cg);
+    }
     return 0;
 }
 
@@ -118,24 +124,32 @@ Value* DeclarationAST::codeGen(class codeGenerator* cg)
             case str2int("int"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
+                else if(cg->fBlock.flag)
+                    cg->fBlock.args.push_back(cg->getIRBuilder()->getInt32Ty());
                 else
                     cg->fBlock.retType = cg->getIRBuilder()->getInt32Ty();
                 break;
             case str2int("long"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
+                else if(cg->fBlock.flag)
+                    cg->fBlock.args.push_back(cg->getIRBuilder()->getInt64Ty());
                 else
                     cg->fBlock.retType = cg->getIRBuilder()->getInt64Ty();
                 break;
             case str2int("float"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
+                else if(cg->fBlock.flag)
+                    cg->fBlock.args.push_back(cg->getIRBuilder()->getFloatTy());
                 else
                     cg->fBlock.retType = cg->getIRBuilder()->getFloatTy();
                 break;
             case str2int("double"):
                 if(InitDeclList)
                     InitDeclList->codeGen(cg);
+                else if(cg->fBlock.flag)
+                    cg->fBlock.args.push_back(cg->getIRBuilder()->getDoubleTy());
                 else
                     cg->fBlock.retType = cg->getIRBuilder()->getDoubleTy();
                 break;
@@ -199,15 +213,21 @@ Value* FunctionAST::codeGen(class codeGenerator* cg)
     }
     else
     {
-        /*val = LLVMGetLastFunction(cg->getModule());
-        val->setName(Name);
-        return 0;*/
-        std::vector<Type*> FuncTy_1_args;
-        FunctionType* FuncTy_1 = FunctionType::get(cg->fBlock.retType, FuncTy_1_args, false);
+        if(parameters)
+        {
+            cg->fBlock.flag = 1;
+            parameters->codeGen(cg);
+        }
+        else {
+            cg->fBlock.flag = 0;
+            cg->fBlock.args.clear();
+        }
+        //std::vector<Type*> FuncTy_1_args = (parameters) ? (parameters->codeGen(cg)) : NULL ;
+        FunctionType* FuncTy = FunctionType::get(cg->fBlock.retType, cg->fBlock.args, false);
         Function* func_main = cg->getModule()->getFunction(Name);
         if (!func_main)
         {
-            func_main = Function::Create(FuncTy_1, GlobalValue::ExternalLinkage, Name, cg->getModule()); 
+            func_main = Function::Create(FuncTy, GlobalValue::ExternalLinkage, Name, cg->getModule()); 
             func_main->setCallingConv(CallingConv::C);
             cg->fBlock.func = func_main;
         }

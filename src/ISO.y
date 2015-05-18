@@ -308,6 +308,7 @@ iteration_statement
 	| postfix_expression DO OR identifier_list OR block END 								{} // a.each do |b| decls stmts end
 	| FOR LPAREN expression_statement expression_statement RPAREN statement 				{ $$ = new ForAST($3, $4, NULL, $6); }
 	| FOR LPAREN expression_statement expression_statement expression RPAREN statement 		{ $$ = new ForAST($3, $4, $5, $7); }
+	| FOR LPAREN declaration expression_statement expression RPAREN statement 				{ $$ = new ForAST($3, $4, $5, $7); }
 	;
 
 block																						// ruby-like do-end block

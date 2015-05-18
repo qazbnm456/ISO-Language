@@ -7,6 +7,11 @@
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/Type.h>
 #include <llvm/Support/raw_ostream.h>
+#include <llvm/ExecutionEngine/MCJIT.h>
+#include <llvm/ExecutionEngine/SectionMemoryManager.h>
+#include <llvm/Support/Host.h>
+#include <llvm/Support/TargetSelect.h>
+#include <llvm/Support/ManagedStatic.h>
 #include <iostream>
 #include <sstream>
 
@@ -106,25 +111,37 @@ Value* codeGenerator::createCast(Value* value,Type* type){
 
 void codeGenerator::generateCode(SegmentAST& root)
 {
-    std::cout << "Generating code...\n";
- 
-    /* Create the top level interpreter function to call as entry */
-    /*FunctionType *ftype = FunctionType::get(Type::getVoidTy(context), false);
-    mainFunction = Function::Create(ftype, GlobalValue::ExternalLinkage, "main", TheModule);
-    BasicBlock *bblock = BasicBlock::Create(context, "entry", mainFunction);*/
+    // Setup a module and engine for JIT-ing
+    /*std::string error;
+    LLVMInitializeNativeTarget();
+    ExecutionEngine *engine = EngineBuilder(TheModule)
+        .setErrorStr(&error)
+        .setOptLevel(CodeGenOpt::Aggressive)
+        .create();
+    if(!engine) {
+        std::cout << "No engine created: " << error << std::endl;
+        exit 1;
+    }*/
 
+    std::cout << "Generating code...\n";
     root.codeGen(this); /* emit bytecode for the toplevel block */
-    
-    /*Builder->SetInsertPoint(bblock);
-    Builder->CreateRetVoid();*/
  
     /* Print the bytecode in a human-readable format
        to see if our program compiled properly
      */
     std::cout << "Code is generated.\n";
     PassManager pm;
+    //pm.add(new TargetData(*(engine->getTargetData())));
     pm.add(createPrintModulePass(outs()));
     pm.run(*TheModule);
+
+    // Compile
+    /*std::cout << "Compiling..." << std::flush;
+    void (*bf)() = (void (*)()) engine->getPointerToFunction(TheModule);
+    std::cout << " done" << std::endl;*/
+    
+    // and run!
+    /*bf();*/
 }
 
 void codeGenerator::printAST(SegmentAST& root)
