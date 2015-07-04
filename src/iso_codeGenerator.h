@@ -3,6 +3,7 @@
 
 #include "ISOLang.h"
 #include "iso_ast.h"
+#include <llvm/ExecutionEngine/ExecutionEngine.h>
 #include <llvm/ExecutionEngine/GenericValue.h>
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
@@ -12,8 +13,54 @@
 #include <vector>
 #include <deque>
 #include <stack>
+#include <setjmp.h>
 
 using namespace llvm;
+
+class isoVM;
+class isoMsgHandler;
+class isoGarbageCollector;
+struct isoGCObject;
+struct isoArray;
+struct isoTable;
+struct isoVariable;
+
+struct isoDebugInfo
+{
+    const char* file;
+    int line;
+};
+
+struct isoCodeGenBlock
+{
+    BasicBlock* m_bblock;
+    BasicBlock* m_leave;
+    NodeAST* m_ast;
+    enum BlockType
+    {
+        CODE,
+        IF_THEN,
+        IF_ELSE,
+        SWITCH,
+        WHILE,
+        DOWHILE,
+        FOR,
+        FOREACH,
+        FUNCTION,
+        NAMESPACE,
+    };
+    BlockType m_type;
+    Value* m_retVar;
+    Value* m_thisVar;
+    Value* m_argArray;
+    Value* m_tmpArray;
+    int m_tmpArraySize;
+    std::list<std::pair<std::string, Value*> > m_localVars;
+    bool m_isBlockEnd;
+    std::list<std::string>* m_stringList;
+    std::list<isoGCObject*>* m_funcDataList;
+    std::list<isoDebugInfo>* m_debugInfoList;
+};
 
 typedef struct FuncBlock {
 	Type* retType;
@@ -22,30 +69,177 @@ typedef struct FuncBlock {
 	int flag = 0;
 } Func_Block;
 
-class codeGenerator
+class isoCodeGenerator
 {
-private:
+
+	friend class isoVM;
+protected:
+	isoVM* m_vm;
+    isoMsgHandler* m_msgHandler;
+    isoGarbageCollector* m_gc;
+    SegmentAST* m_programSegmentAST;
+    Function* m_mainFunction;
+    IRBuilder<> m_irBuilder;
+    //for error handling at runtime
+    jmp_buf m_errorJmpBuf;
+
+    //root variables
+    isoTable* m_rootTable;
+    isoVariable* m_rootTableVar;
+    isoArray* m_rootArgArray;
+    isoArray* m_rootTmpArray;
+    std::list<std::string> m_stringList;
+    std::list<isoGCObject*> m_funcDataList;
+    std::list<isoDebugInfo> m_debugInfoList;
+
+    std::list<isoCodeGenBlock*> m_blocks;
+
+    StringMap<void*> m_globalSymbalMap;
+
 	LLVMContext& context;
-	Module* TheModule;
-	IRBuilder<>* Builder;
+	
 	Function* mainFunction;
 
-public:
-	codeGenerator();
-	~codeGenerator();
-	LLVMContext& getLLVMContext() { return context; }
-	IRBuilder<>* getIRBuilder() { return Builder; }
-	Module* getModule() { return TheModule; }
-	Type* getType(string* name);
-	Constant* getInitial(Type* type);
-	Value* createCast(Value* val, Type* type);
-	void generateCode(SegmentAST& root);
-	void printAST(SegmentAST& root);
+	//for error handling at compile-time
+    bool m_isCompileError;
 
+public:
 	map<string, Type*> typeTable;
 	map<string, Value*> NamedValues;
 	deque<string*>* currentType;
 	Func_Block fBlock;
+
+	Type* getType(string* name);
+	Constant* getInitial(Type* type);
+	Value* createCast(Value* val, Type* type);
+
+public:
+    //global values in vm
+    GlobalVariable* m_gv_vm;
+    GlobalVariable* m_gv_cg;
+    GlobalVariable* m_gv_gc;
+    GlobalVariable* m_gv_errorJmpBuf;
+    GlobalVariable* m_gv_rootTableVar;
+    GlobalVariable* m_gv_rootArgArray;
+    GlobalVariable* m_gv_rootTmpArray;
+    //global functions in vm
+    Function* m_gf_setJmp;
+    Function* m_gf_longJmp;
+    Function* m_gf_newArrayVar;
+    Function* m_gf_setArrayVar;
+    Function* m_gf_getArrayVar;
+    Function* m_gf_getArrayVar_int;
+    Function* m_gf_addTableKeyValue;
+    Function* m_gf_addTableKeyValue_str;
+    Function* m_gf_addTableVar;
+    Function* m_gf_addTableVar_str;
+    Function* m_gf_getTableVar;
+    Function* m_gf_createUpValueTable;
+    Function* m_gf_createFunc;
+    Function* m_gf_assignFunc;
+    Function* m_gf_setFuncPtr;
+    Function* m_gf_setFuncMiscData;
+    Function* m_gf_createTmpArray;
+    Function* m_gf_createTable;
+    Function* m_gf_createArray;
+    Function* m_gf_opGetVar;
+    Function* m_gf_opGetVar_int32;
+    Function* m_gf_opGetVar_int64;
+    Function* m_gf_opGetVar_str;
+    Function* m_gf_opNewVar;
+    Function* m_gf_opNewVar_int32;
+    Function* m_gf_opNewVar_int64;
+    Function* m_gf_opNewVar_str;
+    Function* m_gf_opAssignVar;
+    Function* m_gf_opAssignVar_null;
+    Function* m_gf_opAssignVar_bool;
+    Function* m_gf_opAssignVar_int32;
+    Function* m_gf_opAssignVar_int64;
+    Function* m_gf_opAssignVar_float;
+    Function* m_gf_opAssignVar_double;
+    Function* m_gf_opAssignVar_str;
+    Function* m_gf_opAddVar;
+    Function* m_gf_opSubVar;
+    Function* m_gf_opMulVar;
+    Function* m_gf_opDivVar;
+    Function* m_gf_opModVar;
+    Function* m_gf_opCallFunc;
+    Function* m_gf_opEqualVar;
+    Function* m_gf_opNotEqualVar;
+    Function* m_gf_opCompareVar;
+    Function* m_gf_opPostfixIncVar;
+    Function* m_gf_opPostfixDecVar;
+    Function* m_gf_opPrefixIncVar;
+    Function* m_gf_opPrefixDecVar;
+    Function* m_gf_opUnaryPlusVar;
+    Function* m_gf_opUnaryMinusVar;
+    Function* m_gf_opLogicalNotVar;
+    Function* m_gf_opLogicalAndVar;
+    Function* m_gf_opLogicalOrVar;
+    Function* m_gf_opBitwiseNotVar;
+    Function* m_gf_opBitwiseAndVar;
+    Function* m_gf_opBitwiseOrVar;
+    Function* m_gf_opBitwiseXorVar;
+    Function* m_gf_opToBoolVar;
+    Function* m_gf_opInitIter;
+    Function* m_gf_opIterateVar;
+    Function* m_gf_opNew;
+    Function* m_gf_opDelete;
+    Function* m_gf_opDelete_int32;
+    Function* m_gf_opDelete_int64;
+    Function* m_gf_opDelete_str;
+
+public:
+	isoCodeGenerator(isoVM* vm);
+	~isoCodeGenerator();
+
+	isoVM* getVM() { return m_vm; }
+    isoMsgHandler* getMsgHandler() { return m_msgHandler; }
+    isoGarbageCollector* getGarbageCollector();
+    llvm::LLVMContext& getLLVMContext();
+    llvm::Module* getModule();
+    IRBuilder<>& getIRBuilder() { return m_irBuilder; }
+
+    isoTable* getRootTable() { return m_rootTable; }
+    isoVariable* getRootTableVar() { return m_rootTableVar; }
+
+    void setProgramSegmentAST(SegmentAST* segment) { m_programSegmentAST = segment; }
+    SegmentAST* getProgramSegmentAST() { return m_programSegmentAST; }
+
+    void generateCode();
+    llvm::GenericValue runCode();
+
+    isoCodeGenBlock* currentBlock() { return m_blocks.front(); }
+    void pushBlock(BasicBlock* bblock, BasicBlock* leave,
+                   NodeAST* ast, isoCodeGenBlock::BlockType type,
+                   Value* retVar, Value* thisVar, Value* argArray,
+                   Value* tmpArray, int tmpArraySize,
+                   std::list<std::string>* strList, std::list<isoGCObject*>* funcList,
+                   std::list<isoDebugInfo>* debugInfoList);
+    void popBlock();
+    Value* findLocalVar(const std::string& name);
+    isoCodeGenBlock* findWhereIsBreak();
+    isoCodeGenBlock* findWhereIsContinue();
+
+    Value* createStringPtr(const std::string& str, isoCodeGenBlock* block, IRBuilder<>& builder);
+    Value* createDebugInfoPtr(int line, isoCodeGenBlock* block, IRBuilder<>& builder);
+    Value* createDebugInfoPtr(const char* file, int line, isoCodeGenBlock* block, IRBuilder<>& builder);
+
+    void setCompileError(bool v) { m_isCompileError = v; }
+    bool isCompileError() { return m_isCompileError; }
+    jmp_buf* getErrorJmpBuf() { return &m_errorJmpBuf; }
+
+    void* getGlobalSymbolAddress(const std::string &name);
+
+    void createCoreFunctions();
+
+protected:
+    void llvm_fatal_error_handler(void *user_data, const std::string &reason, bool gen_crash_diag);
+    void eraseMainFunction();
+    
+    void createGlobalValues();
+    void createGlobalFunctions();
+    void addGlobalSymbal(ExecutionEngine *ee, const GlobalValue *gv, void *addr);
 };
 
 #endif //ISO_CODEGEN_H

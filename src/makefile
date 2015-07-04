@@ -1,13 +1,13 @@
 TARGET = ISO
 PP = g++
-FLAGS = -O3 -g -w -lcurses
+FLAGS = -O3 -g -w -lcurses -lz
 LLVM = llvm-config-mp-3.7
-LLVM_ARGS = --cxxflags --ldflags --libs all
+LLVM_ARGS = --cxxflags --ldflags --libs core mcjit native
 
 all: $(TARGET)
 
-$(TARGET): iso_main.cpp lex.yy.c y.tab.c iso_ast.cpp iso_codeGenerator.cpp
-	$(PP) -o $@ iso_main.cpp lex.yy.c y.tab.c iso_ast.cpp iso_codeGenerator.cpp `$(LLVM) $(LLVM_ARGS)` $(FLAGS)
+$(TARGET): iso_main.cpp lex.yy.c y.tab.c iso_ast.cpp iso_codeGenerator.cpp iso_vm.cpp iso_gc.cpp iso_msghandler.cpp iso_variable.cpp iso_stdlib.cpp iso_hashvalue.cpp MurmurHash3.cpp
+	$(PP) -o $@ iso_main.cpp lex.yy.c y.tab.c iso_ast.cpp iso_codeGenerator.cpp iso_vm.cpp iso_gc.cpp iso_msghandler.cpp iso_variable.cpp iso_stdlib.cpp iso_hashvalue.cpp MurmurHash3.cpp `$(LLVM) $(LLVM_ARGS)` $(FLAGS)
 
 lex.yy.c: ISO.l
 	lex $<

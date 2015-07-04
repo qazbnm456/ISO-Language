@@ -41,19 +41,19 @@ typedef uint64_t    isoUInt64;
 typedef float       isoFloat;
 typedef double      isoDouble;
 
-//typedef acUInt8     isoBool;
-//typedef acInt8      isoByte;
-//typedef acUInt8     isoUbyte;
-//typedef acInt16     isoShort;
-//typedef acUInt16    isoUshort;
-//typedef acInt32     isoInt;
-//typedef acUInt32    isoUInt;
-//typedef acInt64     isoLong;
-//typedef acUInt64    isoUlong;
+typedef isoUInt8     isoBool;
+typedef isoInt8      isoByte;
+typedef isoUInt8     isoUbyte;
+typedef isoInt16     isoShort;
+typedef isoUInt16    isoUshort;
+typedef isoInt32     isoInt;
+typedef isoUInt32    isoUInt;
+typedef isoInt64     isoLong;
+typedef isoUInt64    isoUlong;
 typedef isoUInt8     isoChar;
 typedef isoUInt16    isoWchar;
 typedef isoUInt32    isoDchar;
 
 //typedef size_t      isoPointer;
 
-#endif //SIOLANG_H
+#endif //ISOLANG_H

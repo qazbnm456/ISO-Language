@@ -10,6 +10,10 @@ struct isoToken
 {
     int         m_type;
     std::string*     m_name;
+    isoChar*     m_begin;
+    isoChar*     m_end;
+    int         m_beginLine;
+    int         m_endLine;
 
     union
     {
@@ -22,6 +26,11 @@ struct isoToken
             isoChar m_postfix;
         };*/
     };
+
+    std::string getRawString()
+    {
+        return std::string(m_begin, m_end);
+    }
 };
 
 #endif //ISO_TOKEN_H

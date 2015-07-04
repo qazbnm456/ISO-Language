@@ -74,7 +74,7 @@ public:
 
     NodeAST() : m_type(tNodeAST), m_line(0) {}
     virtual ~NodeAST() {}
-    virtual Value* codeGen(class codeGenerator* cg) = 0;
+    virtual Value* codeGen(class isoCodeGenerator* cg) = 0;
     virtual void print(int indent) = 0;
     void printIndent(int indent)
     {
@@ -100,7 +100,7 @@ public:
     {
         m_nodeASTVec.clear();
     }
-    virtual Value* codeGen(class codeGenerator* cg) { return 0; }
+    virtual Value* codeGen(class isoCodeGenerator* cg) { return 0; }
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -129,7 +129,7 @@ public:
     {
         m_stringVec.clear();
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -167,7 +167,7 @@ public:
     {
         m_type = tParaDeclAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -193,7 +193,7 @@ public:
         m_type = tParaDeclListAST;
         ellipsis_exist = false;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -222,7 +222,7 @@ public:
     {
         m_type = tInitDeclAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -242,7 +242,7 @@ public:
     {
         m_type = tInitDeclListAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -275,7 +275,7 @@ public:
     {
         m_type = tInitAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -303,7 +303,7 @@ public:
     {
         m_type = tInitListAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -325,7 +325,7 @@ public:
     {
         m_type = tNullAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -342,7 +342,7 @@ public:
     {
         m_type = tBooleanAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -359,7 +359,7 @@ public:
     {
         m_type = tInt32AST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -376,7 +376,7 @@ public:
     {
         m_type = tInt64AST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -393,7 +393,7 @@ public:
     {
         m_type = tFloatAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -410,7 +410,7 @@ public:
     {
         m_type = tDoubleAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -427,7 +427,7 @@ public:
     {
         m_type = tDeclarationAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -466,7 +466,7 @@ public:
     {
         m_type = tDefinitionAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         if(e_Type == 1)
@@ -524,7 +524,7 @@ public:
         m_type = tGetVarAST;
     }
 
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -577,7 +577,7 @@ public:
     {
         m_type = tFunctionAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
 
     virtual void print(int indent)
     {
@@ -649,7 +649,7 @@ public:
     {
         m_type = tReturnAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -676,7 +676,7 @@ public:
     {
         m_type = tSegmentAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -699,7 +699,7 @@ public:
     {
         m_type = tBlockAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -725,7 +725,7 @@ public:
     {
         m_type = tPostfixIncrementAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -747,7 +747,7 @@ public:
     {
         m_type = tUnaryAST;
     }
-    virtual Value* codeGen(class codeGenerator* c);
+    virtual Value* codeGen(class isoCodeGenerator* c);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -771,7 +771,7 @@ public:
     {
         m_type = tMultiplicativeAST;
     }
-    virtual Value* codeGen(class codeGenerator* c);
+    virtual Value* codeGen(class isoCodeGenerator* c);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -798,7 +798,7 @@ public:
     {
         m_type = tAdditiveAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -825,7 +825,7 @@ public:
     {
         m_type = tShiftAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -852,7 +852,7 @@ public:
     {
         m_type = tRelationalAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -879,7 +879,7 @@ public:
     {
         m_type = tEqualityAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -904,7 +904,7 @@ public:
     {
         m_type = tAndAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -929,7 +929,7 @@ public:
     {
         m_type = tExclusiveOrAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -954,7 +954,7 @@ public:
     {
         m_type = tInclusiveOrAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -979,7 +979,7 @@ public:
     {
         m_type = tLogicalAndAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1004,7 +1004,7 @@ public:
     {
         m_type = tLogicalOrAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1031,7 +1031,7 @@ public:
     {
         m_type = tConditionalAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1061,7 +1061,7 @@ public:
     {
         m_type = tAssignmentAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1088,7 +1088,7 @@ public:
     {
         m_type = tIfElseAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1119,7 +1119,7 @@ public:
     {
         m_type = tSwitchAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1150,7 +1150,7 @@ public:
     {
         m_type = tCaseAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1181,7 +1181,7 @@ public:
     {
         m_type = tContinueAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1196,7 +1196,7 @@ public:
     {
         m_type = tBreakAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1217,7 +1217,7 @@ public:
     {
         m_type = tWhileAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1243,7 +1243,7 @@ public:
     {
         m_type = tDoWhileAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
@@ -1274,7 +1274,7 @@ public:
     {
         m_type = tForAST;
     }
-    virtual Value* codeGen(class codeGenerator* cg);
+    virtual Value* codeGen(class isoCodeGenerator* cg);
     virtual void print(int indent)
     {
         printIndent(indent);
