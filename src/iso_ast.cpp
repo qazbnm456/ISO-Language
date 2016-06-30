@@ -94,13 +94,12 @@ Value* BooleanAST::codeGen(class isoCodeGenerator* cg)
 }
 
 Value* Int32AST::codeGen(class isoCodeGenerator* cg)
-{
-    //return ConstantInt::get(cg->getLLVMContext(), APInt(32, m_val, false));
+{ 
     isoCodeGenBlock* block = cg->currentBlock();
     IRBuilder<>& builder = cg->getIRBuilder();
-    Value* val = builder.CreateCall3(cg->m_gf_getArrayVar_int,
-    block->m_tmpArray, builder.getInt32(block->m_tmpArraySize++), cg->m_gv_vm);
-    builder.CreateCall2(cg->m_gf_opAssignVar_int32, val, builder.getInt32(m_val));
+    Value* val = builder.CreateCall(cg->m_gf_getArrayVar_int,
+        {block->m_tmpArray, builder.getInt32(block->m_tmpArraySize++), cg->m_gv_vm});
+    builder.CreateCall(cg->m_gf_opAssignVar_int32, {val, builder.getInt32(m_val)});
     return val;
 }
 

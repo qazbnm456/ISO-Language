@@ -1,7 +1,7 @@
 #ifndef ISO_CONFIG_H
 #define ISO_CONFIG_H
 
-#include "isolang.h"
+#include "ISOLang.h"
 
 #define ISO_DEBUG 1
 

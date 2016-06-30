@@ -1,7 +1,7 @@
 TARGET = ISO
-PP = g++
-FLAGS = -O3 -g -w -lcurses -lz
-LLVM = llvm-config-mp-3.7
+PP = clang++
+FLAGS = -O3 -g -w -lcurses -lz -ldl -lpthread
+LLVM = llvm-config
 LLVM_ARGS = --cxxflags --ldflags --libs core mcjit native
 
 all: $(TARGET)

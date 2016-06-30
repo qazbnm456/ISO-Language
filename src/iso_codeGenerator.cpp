@@ -2,7 +2,7 @@
 #include "iso_gc.h"
 #include "iso_vm.h"
 #include "iso_codeGenerator.h"
-#include <llvm/PassManager.h>
+#include <llvm/IR/LegacyPassManager.h>
 #include <llvm/IR/Verifier.h>
 #include <llvm/IR/IRPrintingPasses.h>
 #include <llvm/IR/LegacyPassManager.h>
@@ -33,7 +33,7 @@ isoCodeGenerator::isoCodeGenerator(isoVM* vm)
     , m_mainFunction(0)
     , m_irBuilder(vm->getLLVMContext())
     , m_blocks()
-	, context(getGlobalContext())
+    , context(getLLVMContext())
 {
 }
 
@@ -138,7 +138,7 @@ void isoCodeGenerator::generateCode()
 
     m_irBuilder.SetInsertPoint(label_begin);
 
-    Value* retVar = m_irBuilder.CreateCall3(m_gf_newArrayVar, m_gv_rootArgArray, m_irBuilder.getInt32(-1), m_gv_vm, "retVar");
+    Value* retVar = m_irBuilder.CreateCall(m_gf_newArrayVar, {m_gv_rootArgArray, m_irBuilder.getInt32(-1), m_gv_vm}, "retVar");
 
     /* Push a new variable/block context */
     pushBlock(label_begin, label_end, m_programSegmentAST, isoCodeGenBlock::FUNCTION,
